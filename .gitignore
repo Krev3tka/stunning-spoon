@@ -1,1 +1,11 @@
-.idea
+node_modules/
+.svelte-kit/
+build/
+.env
+
+server/server
+*.exe
+*.out
+
+.idea/
+.vscode/
