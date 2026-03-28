@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Chat</title>
+    </head>
+    <body>
+        <input id="clientNameField" value="Unnamed">
+        <button id="connectBut">Подключиться</button>
+        <button id="disconnectBut" style="display: none;">Отключиться</button>
+
+        <div id="interfaceCont" style="display: none; margin-top: 10px;">
+            <textarea id="mesField" style="overflow: auto; width: 600px; height: 600px; resize: none;"></textarea>
+            <button id="sendBut" style="margin-left: 10px; margin-right: 10px;">Отправить</button>
+            <textarea readonly id="chatArea" style="overflow: auto; width: 600px; height: 600px; resize: none;"></textarea>
+        </div>
+
+        <script>
+            const connectBut = document.getElementById("connectBut");
+            const disconnectBut = document.getElementById("disconnectBut");
+            const clientNameField = document.getElementById("clientNameField");
+
+            const interfaceCont = document.getElementById("interfaceCont");
+            const sendBut = document.getElementById("sendBut");
+            const mesField = document.getElementById("mesField");
+            const chatArea = document.getElementById("chatArea");
+
+            let ws;
+
+            connectBut.addEventListener("click", () =>{
+                connectBut.style.display = "none";
+                disconnectBut.style.display = "initial";
+                ws = new WebSocket(`ws://localhost:8080?clientName=${encodeURIComponent(clientNameField.value)}`);
+
+                interfaceCont.style.display = "flex";
+                ws.onmessage = (e) => {
+                    chatArea.value += `\n${e.data}`;
+                };
+            });
+
+            disconnectBut.addEventListener("click", () => {
+                disconnectBut.style.display = "none";
+                connectBut.style.display = "initial";
+                ws.close();
+
+                interfaceCont.style.display = "none";
+            });
+
+            sendBut.addEventListener("click", () => {
+                if(mesField.value !== ""){
+                    ws.send(`${clientNameField.value}: ${mesField.value}`);
+                }
+            });
+        </script>
+    </body>
+</html>
