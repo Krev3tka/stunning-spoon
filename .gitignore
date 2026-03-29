@@ -7,5 +7,7 @@ server/server
 *.exe
 *.out
 
+docker-compose.override.yml
+
 .idea/
 .vscode/

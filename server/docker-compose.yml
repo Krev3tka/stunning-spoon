@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15-alpine
+    network_mode: "host"
+    networks:
+      - custom_net
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dnd_db
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  cache:
+    image: redis:7-alpine
+    network_mode: "host"
+    networks:
+      - custom_net
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
+
+networks:
+  custom_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/24
